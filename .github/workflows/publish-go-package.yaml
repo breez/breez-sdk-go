@@ -1,0 +1,68 @@
+name: Publish Go Bindings
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'breez-sdk repo release (MAJOR.MINOR.PATCH)'
+        required: true
+        type: string
+
+jobs:
+  build-tag-release:
+    name: Build, tag, and release the Breez SDK Go bindings
+    runs-on: macOS-latest
+    steps:
+      - name: Setup gcc
+        uses: egor-tensin/setup-gcc@v1
+        with:
+          version: latest
+      - name: Install required dependencies
+        run: |
+          brew install protobuf
+          cargo install --version 0.22.0 uniffi_bindgen
+      - name: Checkout breez-sdk repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository_owner }}/breez-sdk
+          path: build
+          ref: ${{ inputs.version }}
+      - name: Checkout breez-sdk-go repo
+        uses: actions/checkout@v3
+        with:
+          path: dist
+      - name: Build Go bindings
+        working-directory: build/libs/sdk-bindings
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.REPO_SSH_KEY}}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          sudo chmod 600 ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_rsa
+          make init
+          make golang-darwin
+          cargo build --release --target aarch64-unknown-linux-gnu
+          cargo build --release --target amd-unknown-linux-gnu
+      - name: Copy binding
+        working-directory: build/libs/sdk-bindings/ffi/golang/breez/breez_sdk
+        run: |
+          cp breez_sdk.go ../../../../../../../dist/breezsdk
+      - name: Copy libraries
+        working-directory: build/libs/target
+        run: |
+          cp aarch64-apple-darwin/release/libbreez_sdk_bindings.dylib ../../../dist/breezsdk/lib/darwin-aarch64
+          cp x86_64-apple-darwin/release/libbreez_sdk_bindings.dylib ../../../dist/breezsdk/lib/darwin-amd64
+          cp aarch64-unknown-linux-gnu/release/libbreez_sdk_bindings.so ../../../dist/breezsdk/lib/linux-aarch64
+          cp x86_64-unknown-linux-gnu/release/libbreez_sdk_bindings.so ../../../dist/breezsdk/lib/linux-amd64
+      - name: Tag the Go bindings
+        working-directory: dist
+        run: |
+          git add breezsdk/breez_sdk.go
+          git add breezsdk/lib/darwin-aarch64/libbreez_sdk_bindings.dylib
+          git add breezsdk/lib/darwin-amd64/libbreez_sdk_bindings.dylib
+          git add breezsdk/lib/linux-aarch64/libbreez_sdk_bindings.so
+          git add breezsdk/lib/linux-amd64/libbreez_sdk_bindings.so
+          git commit -m "Update Breez SDK Go bindings to version ${{ inputs.version }}"
+          git push
+          git tag ${{ inputs.version }} -m "${{ inputs.version }}"
+          git push --tags
