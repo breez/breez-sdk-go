@@ -43,9 +43,9 @@ jobs:
           sudo chmod 600 ~/.ssh/id_rsa
           ssh-add ~/.ssh/id_rsa
           make init
-          make golang-darwin
           cargo build --release --target aarch64-unknown-linux-gnu
-          cargo build --release --target amd-unknown-linux-gnu
+          cargo build --release --target x86_64-unknown-linux-gnu
+          make golang-darwin
       - name: Copy binding
         working-directory: build/libs/sdk-bindings/ffi/golang/breez/breez_sdk
         run: |
