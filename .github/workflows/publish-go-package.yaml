@@ -12,13 +12,14 @@ jobs:
     name: Build, tag, and release the Breez SDK Go bindings
     runs-on: macOS-latest
     steps:
-      - name: Setup gcc
-        uses: egor-tensin/setup-gcc@v1
-        with:
-          version: latest
       - name: Install required dependencies
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
         run: |
+          brew tap messense/macos-cross-toolchains
           brew install protobuf
+          brew install aarch64-unknown-linux-gnu
+          brew install x86_64-unknown-linux-gnu
           cargo install --version 0.22.0 uniffi_bindgen
       - name: Checkout breez-sdk repo
         uses: actions/checkout@v3
@@ -33,6 +34,8 @@ jobs:
       - name: Build Go bindings
         working-directory: build/libs/sdk-bindings
         env:
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
+          CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER: x86_64-linux-gnu-gcc
           SSH_PRIVATE_KEY: ${{secrets.REPO_SSH_KEY}}
         run: |
           mkdir -p ~/.ssh
