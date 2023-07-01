@@ -26,7 +26,7 @@ jobs:
         with:
           repository: ${{ github.repository_owner }}/breez-sdk
           path: build
-          ref: ${{ inputs.version }}
+          #ref: ${{ inputs.version }}
       - name: Checkout breez-sdk-go repo
         uses: actions/checkout@v3
         with:
