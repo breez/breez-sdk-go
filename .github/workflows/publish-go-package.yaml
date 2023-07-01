@@ -49,22 +49,22 @@ jobs:
       - name: Copy binding
         working-directory: build/libs/sdk-bindings/ffi/golang/breez/breez_sdk
         run: |
-          cp breez_sdk.go ../../../../../../../dist/breezsdk
+          cp breez_sdk.go ../../../../../../../dist/breez_sdk
       - name: Copy libraries
         working-directory: build/libs/target
         run: |
-          cp aarch64-apple-darwin/release/libbreez_sdk_bindings.dylib ../../../dist/breezsdk/lib/darwin-aarch64
-          cp x86_64-apple-darwin/release/libbreez_sdk_bindings.dylib ../../../dist/breezsdk/lib/darwin-amd64
-          cp aarch64-unknown-linux-gnu/release/libbreez_sdk_bindings.so ../../../dist/breezsdk/lib/linux-aarch64
-          cp x86_64-unknown-linux-gnu/release/libbreez_sdk_bindings.so ../../../dist/breezsdk/lib/linux-amd64
+          cp aarch64-apple-darwin/release/libbreez_sdk_bindings.dylib ../../../dist/breez_sdk/lib/darwin-aarch64
+          cp x86_64-apple-darwin/release/libbreez_sdk_bindings.dylib ../../../dist/breez_sdk/lib/darwin-amd64
+          cp aarch64-unknown-linux-gnu/release/libbreez_sdk_bindings.so ../../../dist/breez_sdk/lib/linux-aarch64
+          cp x86_64-unknown-linux-gnu/release/libbreez_sdk_bindings.so ../../../dist/breez_sdk/lib/linux-amd64
       - name: Tag the Go bindings
         working-directory: dist
         run: |
-          git add breezsdk/breez_sdk.go
-          git add breezsdk/lib/darwin-aarch64/libbreez_sdk_bindings.dylib
-          git add breezsdk/lib/darwin-amd64/libbreez_sdk_bindings.dylib
-          git add breezsdk/lib/linux-aarch64/libbreez_sdk_bindings.so
-          git add breezsdk/lib/linux-amd64/libbreez_sdk_bindings.so
+          git add breez_sdk/breez_sdk.go
+          git add breez_sdk/lib/darwin-aarch64/libbreez_sdk_bindings.dylib
+          git add breez_sdk/lib/darwin-amd64/libbreez_sdk_bindings.dylib
+          git add breez_sdk/lib/linux-aarch64/libbreez_sdk_bindings.so
+          git add breez_sdk/lib/linux-amd64/libbreez_sdk_bindings.so
           git commit -m "Update Breez SDK Go bindings to version ${{ inputs.version }}"
           git push
           git tag ${{ inputs.version }} -m "${{ inputs.version }}"

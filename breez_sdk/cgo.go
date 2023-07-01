@@ -11,5 +11,5 @@ import "C"
 
 // See https://github.com/golang/go/issues/26366.
 import (
-	_ "github.com/breez/breez-sdk-go/breezsdk/lib"
+	_ "github.com/breez/breez-sdk-go/breez_sdk/lib"
 )
