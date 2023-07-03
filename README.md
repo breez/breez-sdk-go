@@ -65,11 +65,11 @@ package main
 
 import (
 	"log"
-	"github.com/breez/breez-sdk-go/breezsdk"
+	"github.com/breez/breez-sdk-go/breez_sdk"
 )
 
 func main() {
-	seed, _ := breezsdk.MnemonicToSeed("cruise clever syrup coil cute execute laundry general cover prevent law sheriff")
+	seed, _ := breez_sdk.MnemonicToSeed("cruise clever syrup coil cute execute laundry general cover prevent law sheriff")
 
 	log.Printf("Seed: %v", seed)
 }
