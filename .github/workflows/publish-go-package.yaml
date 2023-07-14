@@ -70,7 +70,7 @@ jobs:
           git add breez_sdk/lib/linux-aarch64/libbreez_sdk_bindings.so
           git add breez_sdk/lib/linux-amd64/libbreez_sdk_bindings.so
           git add breez_sdk/lib/windows-amd64/breez_sdk_bindings.dll
-          git commit -m "Update Breez SDK Go bindings to version ${{ inputs.version }}"
+          git commit -m "Update Breez SDK Go bindings to version $v{{ inputs.version }}"
           git push
-          git tag ${{ inputs.version }} -m "${{ inputs.version }}"
+          git tag ${{ inputs.version }} -m "v${{ inputs.version }}"
           git push --tags
