@@ -20,6 +20,7 @@ jobs:
           brew install protobuf
           brew install aarch64-unknown-linux-gnu
           brew install x86_64-unknown-linux-gnu
+          brew install mingw-w64
           cargo install --version 0.22.0 uniffi_bindgen
       - name: Checkout breez-sdk repo
         uses: actions/checkout@v3
@@ -43,8 +44,10 @@ jobs:
           sudo chmod 600 ~/.ssh/id_rsa
           ssh-add ~/.ssh/id_rsa
           make init
+          rustup target add x86_64-pc-windows-gnu
           cargo build --release --target aarch64-unknown-linux-gnu
           cargo build --release --target x86_64-unknown-linux-gnu
+          cargo build --release --target x86_64-pc-windows-gnu
           make golang-darwin
       - name: Copy binding
         working-directory: build/libs/sdk-bindings/ffi/golang/breez/breez_sdk
@@ -57,6 +60,7 @@ jobs:
           cp x86_64-apple-darwin/release/libbreez_sdk_bindings.dylib ../../../dist/breez_sdk/lib/darwin-amd64
           cp aarch64-unknown-linux-gnu/release/libbreez_sdk_bindings.so ../../../dist/breez_sdk/lib/linux-aarch64
           cp x86_64-unknown-linux-gnu/release/libbreez_sdk_bindings.so ../../../dist/breez_sdk/lib/linux-amd64
+          cp x86_64-pc-windows-gnu/release/breez_sdk_bindings.dll ../../../dist/breez_sdk/lib/windows-amd64
       - name: Tag the Go bindings
         working-directory: dist
         run: |
@@ -65,6 +69,7 @@ jobs:
           git add breez_sdk/lib/darwin-amd64/libbreez_sdk_bindings.dylib
           git add breez_sdk/lib/linux-aarch64/libbreez_sdk_bindings.so
           git add breez_sdk/lib/linux-amd64/libbreez_sdk_bindings.so
+          git add breez_sdk/lib/windows-amd64/breez_sdk_bindings.dll
           git commit -m "Update Breez SDK Go bindings to version ${{ inputs.version }}"
           git push
           git tag ${{ inputs.version }} -m "${{ inputs.version }}"
