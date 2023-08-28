@@ -28,14 +28,24 @@ this library works (and is tested) on the following platforms:
   </thead>
   <tbody>
     <tr>
-      <td rowspan="2">Linux</td>
+      <td rowspan="4">Android</td>
       <td><code>amd64</code></td>
-      <td><code>x86_64-unknown-linux-gnu</code></td>
+      <td><code>x86_64-linux-android</code></td>
       <td>✅</td>
     </tr>
     <tr>
       <td><code>aarch64</code></td>
-      <td><code>aarch64-unknown-linux-gnu</code></td>
+      <td><code>aarch64-linux-android</code></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td><code>aarch</code></td>
+      <td><code>armv7-linux-androideabi</code></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td><code>386</code></td>
+      <td><code>i686-linux-android</code></td>
       <td>✅</td>
     </tr>
     <tr>
@@ -47,6 +57,17 @@ this library works (and is tested) on the following platforms:
     <tr>
       <td><code>aarch64</code></td>
       <td><code>aarch64-apple-darwin</code></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Linux</td>
+      <td><code>amd64</code></td>
+      <td><code>x86_64-unknown-linux-gnu</code></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td><code>aarch64</code></td>
+      <td><code>aarch64-unknown-linux-gnu</code></td>
       <td>✅</td>
     </tr>
     <tr>
