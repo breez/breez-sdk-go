@@ -28,14 +28,24 @@ this library works (and is tested) on the following platforms:
   </thead>
   <tbody>
     <tr>
-      <td rowspan="2">Linux</td>
+      <td rowspan="4">Android</td>
       <td><code>amd64</code></td>
-      <td><code>x86_64-unknown-linux-gnu</code></td>
+      <td><code>x86_64-linux-android</code></td>
       <td>✅</td>
     </tr>
     <tr>
       <td><code>aarch64</code></td>
-      <td><code>aarch64-unknown-linux-gnu</code></td>
+      <td><code>aarch64-linux-android</code></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td><code>aarch</code></td>
+      <td><code>armv7-linux-androideabi</code></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td><code>386</code></td>
+      <td><code>i686-linux-android</code></td>
       <td>✅</td>
     </tr>
     <tr>
@@ -47,6 +57,17 @@ this library works (and is tested) on the following platforms:
     <tr>
       <td><code>aarch64</code></td>
       <td><code>aarch64-apple-darwin</code></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Linux</td>
+      <td><code>amd64</code></td>
+      <td><code>x86_64-unknown-linux-gnu</code></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td><code>aarch64</code></td>
+      <td><code>aarch64-unknown-linux-gnu</code></td>
       <td>✅</td>
     </tr>
     <tr>
@@ -73,6 +94,50 @@ func main() {
 
 	log.Printf("Seed: %v", seed)
 }
+```
+
+## Bundling
+
+For some platforms the provided binding libraries need to be copied into a location where they need to be found during runtime.
+
+### Android
+
+Copy the binding libraries into the jniLibs directory of your app
+```bash
+cp vendor/github.com/breez/breez-sdk-go/breez_sdk/lib/android-386/*.so android/app/src/main/jniLibs/x86/
+cp vendor/github.com/breez/breez-sdk-go/breez_sdk/lib/android-aarch/*.so android/app/src/main/jniLibs/armeabi-v7a/
+cp vendor/github.com/breez/breez-sdk-go/breez_sdk/lib/android-aarch64/*.so android/app/src/main/jniLibs/arm64-v8a/
+cp vendor/github.com/breez/breez-sdk-go/breez_sdk/lib/android-amd64/*.so android/app/src/main/jniLibs/x86_64/
+```
+So they are in the following structure
+```
+└── android
+    ├── app
+        └── src
+            └── main
+                └── jniLibs
+                    ├── arm64-v8a
+                        ├── libbreez_sdk_bindings.so
+                        └── libc++_shared.so
+                    ├── armeabi-v7a
+                        ├── libbreez_sdk_bindings.so
+                        └── libc++_shared.so
+                    ├── x86
+                        ├── libbreez_sdk_bindings.so
+                        └── libc++_shared.so
+                    └── x86_64
+                        ├── libbreez_sdk_bindings.so
+                        └── libc++_shared.so
+                └── AndroidManifest.xml
+        └── build.gradle
+    └── build.gradle
+```
+
+### Windows
+
+Copy the binding library to the same directory as the executable file or include the library into the windows install packager.
+```bash
+cp vendor/github.com/breez/breez-sdk-go/breez_sdk/lib/windows-amd64/*.dll build/windows/
 ```
 
 ## 💡 Information for Maintainers and Contributors
