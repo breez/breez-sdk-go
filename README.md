@@ -96,6 +96,50 @@ func main() {
 }
 ```
 
+## Bundling
+
+For some platforms the provided binding libraries need to be copied into a location where they need to be found during runtime.
+
+### Android
+
+Copy the binding libraries into the jniLibs directory of your app
+```bash
+cp vendor/github.com/breez/breez-sdk-go/breez_sdk/lib/android-386/*.so android/app/src/main/jniLibs/x86/
+cp vendor/github.com/breez/breez-sdk-go/breez_sdk/lib/android-aarch/*.so android/app/src/main/jniLibs/armeabi-v7a/
+cp vendor/github.com/breez/breez-sdk-go/breez_sdk/lib/android-aarch64/*.so android/app/src/main/jniLibs/arm64-v8a/
+cp vendor/github.com/breez/breez-sdk-go/breez_sdk/lib/android-amd64/*.so android/app/src/main/jniLibs/x86_64/
+```
+So they are in the following structure
+```
+└── android
+    ├── app
+        └── src
+            └── main
+                └── jniLibs
+                    ├── arm64-v8a
+                        ├── libbreez_sdk_bindings.so
+                        └── libc++_shared.so
+                    ├── armeabi-v7a
+                        ├── libbreez_sdk_bindings.so
+                        └── libc++_shared.so
+                    ├── x86
+                        ├── libbreez_sdk_bindings.so
+                        └── libc++_shared.so
+                    └── x86_64
+                        ├── libbreez_sdk_bindings.so
+                        └── libc++_shared.so
+                └── AndroidManifest.xml
+        └── build.gradle
+    └── build.gradle
+```
+
+### Windows
+
+Copy the binding library to the same directory as the executable file or include the library into the windows install packager.
+```bash
+cp vendor/github.com/breez/breez-sdk-go/breez_sdk/lib/windows-amd64/*.dll build/windows/
+```
+
 ## 💡 Information for Maintainers and Contributors
 
 This repository is used to publish a Go package providing Go bindings to the Breez SDK's [underlying Rust implementation](https://github.com/breez/breez-sdk). The Go bindings are generated using [UniFFi Bindgen Go](https://github.com/NordSecurity/uniffi-bindgen-go).
