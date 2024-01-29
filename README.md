@@ -74,7 +74,7 @@ this library works (and is tested) on the following platforms:
       <td>Windows</td>
       <td><code>amd64</code></td>
       <td><code>x86_64-pc-windows-msvc</code></td>
-      <td>⏳</td>
+      <td>✅</td>
     </tr>
   </tbody>
 </table>
