@@ -74,7 +74,7 @@ this library works (and is tested) on the following platforms:
       <td>Windows</td>
       <td><code>amd64</code></td>
       <td><code>x86_64-pc-windows-msvc</code></td>
-      <td>⏳</td>
+      <td>✅</td>
     </tr>
   </tbody>
 </table>
@@ -146,4 +146,4 @@ This repository is used to publish a Go package providing Go bindings to the Bre
 
 Any changes to the Breez SDK, the Go bindings, and the configuration of this Go package must be made via the [breez-sdk](https://github.com/breez/breez-sdk) repo.
 
-To release a new version of this package, go to the Actions tab of this GitHub repository. Then select the *Publish Go Package* workflow and run it on the `main` branch. It will ask for a version as input. This allows you to specify the version (e.g., *0.0.1*) of the [breez-sdk](https://github.com/breez/breez-sdk) repository that should be released as a Go package.
+To release a new version of this package, go to the Actions tab of the https://github.com/breez/breez-sdk GitHub repository. Then select the *Publish All Packages* workflow and fill in the form with the required version. 
