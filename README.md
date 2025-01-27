@@ -135,10 +135,17 @@ So they are in the following structure
 
 ### Windows
 
+#### Binding Library
+
+The binding library is needed to both compile and run your go application.
+
 Copy the binding library to the same directory as the executable file or include the library into the windows install packager.
 ```bash
 cp vendor/github.com/breez/breez-sdk-go/breez_sdk/lib/windows-amd64/*.dll build/windows/
 ```
+#### C Compilation
+
+To compile the breez sdk package with your go application you will need gcc. It can be installed with `choco install mingw`.
 
 ## 💡 Information for Maintainers and Contributors
 
