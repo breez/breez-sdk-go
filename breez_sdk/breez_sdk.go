@@ -407,7 +407,7 @@ func uniffiCheckChecksums() {
 		checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 			return C.uniffi_breez_sdk_bindings_checksum_func_set_log_stream()
 		})
-		if checksum != 34756 {
+		if checksum != 25613 {
 			// If this happens try cleaning and rebuilding your project
 			panic("breez_sdk: uniffi_breez_sdk_bindings_checksum_func_set_log_stream: UniFFI API checksum mismatch")
 		}
@@ -6656,6 +6656,42 @@ func (_ FfiDestroyerInputType) Destroy(value InputType) {
 	value.Destroy()
 }
 
+type LevelFilter uint
+
+const (
+	LevelFilterOff   LevelFilter = 1
+	LevelFilterError LevelFilter = 2
+	LevelFilterWarn  LevelFilter = 3
+	LevelFilterInfo  LevelFilter = 4
+	LevelFilterDebug LevelFilter = 5
+	LevelFilterTrace LevelFilter = 6
+)
+
+type FfiConverterLevelFilter struct{}
+
+var FfiConverterLevelFilterINSTANCE = FfiConverterLevelFilter{}
+
+func (c FfiConverterLevelFilter) Lift(rb RustBufferI) LevelFilter {
+	return LiftFromRustBuffer[LevelFilter](c, rb)
+}
+
+func (c FfiConverterLevelFilter) Lower(value LevelFilter) C.RustBuffer {
+	return LowerIntoRustBuffer[LevelFilter](c, value)
+}
+func (FfiConverterLevelFilter) Read(reader io.Reader) LevelFilter {
+	id := readInt32(reader)
+	return LevelFilter(id)
+}
+
+func (FfiConverterLevelFilter) Write(writer io.Writer, value LevelFilter) {
+	writeInt32(writer, int32(value))
+}
+
+type FfiDestroyerLevelFilter struct{}
+
+func (_ FfiDestroyerLevelFilter) Destroy(value LevelFilter) {
+}
+
 type LnUrlAuthError struct {
 	err error
 }
@@ -10126,6 +10162,43 @@ func (_ FfiDestroyerOptionalSymbol) Destroy(value *Symbol) {
 	}
 }
 
+type FfiConverterOptionalLevelFilter struct{}
+
+var FfiConverterOptionalLevelFilterINSTANCE = FfiConverterOptionalLevelFilter{}
+
+func (c FfiConverterOptionalLevelFilter) Lift(rb RustBufferI) *LevelFilter {
+	return LiftFromRustBuffer[*LevelFilter](c, rb)
+}
+
+func (_ FfiConverterOptionalLevelFilter) Read(reader io.Reader) *LevelFilter {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterLevelFilterINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalLevelFilter) Lower(value *LevelFilter) C.RustBuffer {
+	return LowerIntoRustBuffer[*LevelFilter](c, value)
+}
+
+func (_ FfiConverterOptionalLevelFilter) Write(writer io.Writer, value *LevelFilter) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterLevelFilterINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalLevelFilter struct{}
+
+func (_ FfiDestroyerOptionalLevelFilter) Destroy(value *LevelFilter) {
+	if value != nil {
+		FfiDestroyerLevelFilter{}.Destroy(*value)
+	}
+}
+
 type FfiConverterOptionalNodeCredentials struct{}
 
 var FfiConverterOptionalNodeCredentialsINSTANCE = FfiConverterOptionalNodeCredentials{}
@@ -11272,9 +11345,9 @@ func ServiceHealthCheck(apiKey string) (ServiceHealthCheckResponse, *SdkError) {
 	}
 }
 
-func SetLogStream(logStream LogStream) *SdkError {
+func SetLogStream(logStream LogStream, filterLevel *LevelFilter) *SdkError {
 	_, _uniffiErr := rustCallWithError[SdkError](FfiConverterSdkError{}, func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_breez_sdk_bindings_fn_func_set_log_stream(FfiConverterCallbackInterfaceLogStreamINSTANCE.Lower(logStream), _uniffiStatus)
+		C.uniffi_breez_sdk_bindings_fn_func_set_log_stream(FfiConverterCallbackInterfaceLogStreamINSTANCE.Lower(logStream), FfiConverterOptionalLevelFilterINSTANCE.Lower(filterLevel), _uniffiStatus)
 		return false
 	})
 	return _uniffiErr
